@@ -1,0 +1,49 @@
+1. Czytnik interfejsu diagnostycznego OBD II (wykorzystanie modułu ELM 327)
+Implementacja programu odczytującego komunikaty pochodzące z interfejsu OBDII z wykorzystaniem Bluetooth – emulacja portu szeregowego. Możliwość odczytania kodu błędów, rejestracja podstawowych danych o pracy silnika + wykresy tych danych. Możliwość resetu kodu błędów.
+
+2. Internetowy wieloosobowy edytor tekstu czasu rzeczywistego 
+Należy zaimplementować aplikację na wzór google docs. Wielu użytkowników powinno mieć możliwość edycji jednego dokumentu w tym samym czasie, na bieżąco widząc zmiany wprowadzane przez innych użytkowników. Minimalna funkcjonalność to opcje wycinania, kopiowania i wklejania tekstu, a także pisania i usuwania tekstu. Na ocene bardzo dobrą aplikacja powinna posiadać wewnętrzny czat.
+Proponowane technologie: QT
+
+3. System do inteligentnego sterowania oświetleniem w domu
+Wymagania sprzętowe:
+- Raspberry PI (lub Arduino/BeagleBone/lub podobne roziązanie)
+- Zainstalowany na płytce moduł do komunikacji bezprzewodowej (Bluetoooth, mogem 3G/4G lub WIFI)
+- Czujnik światła (opcjonalne)
+- Diody led (symulujące działanie oświetlenia w domu)
+
+Wymagania systemowe:
+- Dowolna dystrybucja Linuxa lub skompilowane jądro Linuxa z odpowiednim Device Tree
+Wymagania funkcjonalne:
+- Możliwość zdalnego sterowania oświetleniem (bezprzewodowo)
+- Możliwość wykrywania (bezprzewodowo) użytkownika i zapalania oświetlenia
+- Możliwość automatycznego zapalania oświetlenia po zmierzchu z wykorzystaniem czujnika(opcjonalne)
+4. Aplikacja do monitorowania zdalnych usług sieciowych
+Program sprawdza, czy dana usługa prawidłowo obsługuje żądania. Implemenmtacja sprawdzenia co najmniej 5 różnych usług (http, smtp, ssh, dns,LDAP – lub innych). W przypadku znalezienia problemu ma wysyłać maila. Program ma pamiętać historię awarii.
+Prosta stacja pogodowa z wykorzystaniem arduino.
+
+5. Rozproszony generator ruchu sieciowego, badanie osiąganych przepływności w sieciach.
+Generacja ruchu sieciowego przez wiele hostów w celu sprawdzenia możliwości obsłużenia dane danego hosta. Możliwość zmiany portu, wielkości pakietu. Generacja wykresów po skończonych testach
+
+6. Stacja pogodowa.
+Układ sprawdzający oraz prezentujący za pomocą wyświetlacza lub interfejsu webowego informacje o minimum 3 parametrach środowiskowych w pomieszczeniu. (temp, ciśnienie, wilgotność). Informacje mogą być wyświetlane na wyświetlaczu lub na stworzonym interfejsie webowym, urządzenie ma mieć historię pomiarów
+
+7. Automatyczne sterowanie podlewaniem roślin doniczkowych
+Układ mierzący wilgotność gleby oraz dozujący wodę w przypadku spadku wilgotności poniżej pewnego poziomu. Układ wraz z wilgotnością ma mierzyć temperaturę otoczenia. Zawarty program ma mieć historię pomiarów, oraz umożliwiać ich prezentację. Układ powinien alarmować o braku wody w zasobniku na wodę.
+
+8. Zamek cyfrowy wykorzystujący kody jednorazowe 
+Implementacja systemu pozwalającego na wykorzystanie kodów jednorazowych do otworzenia zamka cyfrowego, opracowanie metody dystrybucji kluczy jednorazowych.
+
+9. Aplikacja mierząca poziom sygnału sieci WiFi wraz z wizualizacją oraz estymacją położenia AP
+Pomiar siły sygnału sieci WiFi oraz estymacja odległości do AP, Po podaniu informacji o położeniu komputera estymacja położenia AP
+
+10. Komunikator wykorzystujący steanografię
+Sieciowy komunikator pozwalający na wysyłanie i odbieranie obrazów oraz zaszycie w obrazach utajnionej wiadomości. Komunikator ma działać w oparciu o sieci p2p.
+
+11. Aplikacja do zmiany barwy głosu 
+Program pozwalający na zmianę barwy głosu w czasie rzeczywistym, Program powinien pozwalać na rejestrowanie i odtwarzanie zmienionej barwy.
+
+12. Rejestrator przydziału i rozliczania zadań
+Program do ewidencji czasu poświęconego na pracę w danym projekcie. Ma pozwalać na dodanie dowolnej liczby projektów, użytkownik ma mieć możliwość uruchomienia momentu liczenia dla dowolnego projektu, jak i zatrzymania. Program powinien posiadać historię pracy, pokazać czas pracy aplikacji w stosunku do projektów.
+
+
