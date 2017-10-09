@@ -7,6 +7,12 @@ set (CMAKE_CXX_STANDARD 11)
 find_package(GTest REQUIRED)
 include_directories(${GTEST_INCLUDE_DIRS})
 
+find_package(GMock REQUIRED)
+include_directories(${GMOCK_INCLUDE_DIRS})
+
 # Link runTests with what we want to test and the GTest and pthread library
+
+set(CMAKE_CXX_FLAGS "${CMAXE_CXX_FLAGS} -Wall -g")
+
 add_executable(runTests test.cpp)
 target_link_libraries(runTests ${GTEST_LIBRARIES} pthread)

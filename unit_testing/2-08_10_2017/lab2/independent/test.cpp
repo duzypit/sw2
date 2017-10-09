@@ -1,3 +1,5 @@
+//https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/
+//https://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/
 #include <gtest/gtest.h>
 #include "Picture.hpp"
 #include "Rectangle.hpp"
