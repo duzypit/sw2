@@ -1,0 +1,4 @@
+Zajęcia 1 - templates
+- ogarnąć prezentację
+- ogarnąć pierwsze ćwiczenie z prezentacji (klas na tpl przyjmująca std::string oraz const * char) - na kontenerze std::string
+- ogarnąć drugie ćwiczenie - tak jak pierwsze 
