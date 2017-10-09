@@ -1,0 +1,1 @@
+Pierwsze zmiany w repozytorium

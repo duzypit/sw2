@@ -1,0 +1,18 @@
+
+Przedmiot: Testowanie oprogramowania - testy jednostowe/funkcjonalne									
+
+Linki:
+1. Slack workspace URL:	wizutworkspace.slack.com
+2. SVN repo: https://szz1-ldl-p05963.synapse.com:8443/svn/lab/
+
+Zadanie 1: Wprowadzenie do Git
+a) stwórz konto na https://github.com
+b) zainstaluj i skonfiguruj git'a
+c) sklonuj repo https://github.com/WojRogowski/Lab1.git
+d) Dodaj własny plik README.md (w nowym katalogu nazwanym od nazwiska) dokumentujący postęp prac
+e) do pliku .gitignore dodaj wykluczenie plików w formacie *.<nazwisko>
+
+Zadanie 2: Wprowadzenie do SVN
+a) zainstaluj TortoiseSVN
+b) pobierz repo https://szz1-ldl-p05963.synapse.com:8443/svn/lab/
+d) Dodaj własny plik <nazwisko>.txt

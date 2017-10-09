@@ -1,0 +1,1 @@
+obczaić w jaki sposób dodać gtest do kompilacji z shella
