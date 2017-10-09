@@ -1,0 +1,10 @@
+1. kod w cvs
+2. przegląd kodu okresowy
+3. dokumentacja w cvs
+4. musi byc czesc dokumentacji, mają być testy + dokumentacja
+5. wykaz funkcjonalnosci - ma byc w doxach
+6. diagram przypadków użycia
+7. prywatne repo na bitbucket można 
+8. osobna osoba dla testów aplikacji
+9. 17 lutu zaliczenie
+10. 
