@@ -1,7 +1,9 @@
 #include <iostream>
+#include "IShape.hpp"
 #include "Picture.hpp"
 #include "Rectangle.hpp"
 #include "Triangle.hpp"
+
 
 int main(int , char **)
 {
