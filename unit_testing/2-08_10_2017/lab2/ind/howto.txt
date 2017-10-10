@@ -1,4 +1,4 @@
-#HowTo - podłaczenie google mock bez użycia qtcreatora.
+#HowTo - podłączenie google mock bez użycia qtcreatora.
 
 #Instrukcja dla Ubuntu, na bank działa w 13.04+
 
@@ -18,13 +18,13 @@ sudo cp *.a /usr/lib
 
 #funkcja main musi wyglądać w ten sposób:
 
-#int main(int argc, char **argv) 
-#{
-#  ::testing::InitGoogleTest(&argc, argv);
-#  return RUN_ALL_TESTS();
-#}
+int main(int argc, char **argv) 
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
 
 #podczas kompilacj należy dodać statyczne biblioteki -pthread -lgtest
-#g++ -Wall -Wextra Picture.cpp Rectangle.cpp Triangle.cpp test.cpp -std=c++11 -pthread -lgtest
+g++ -Wall -Wextra Picture.cpp Rectangle.cpp Triangle.cpp test.cpp -std=c++11 -pthread -lgtest
 
 #żródła: https://github.com/duzypit/sw2/tree/master/unit_testing/2-08_10_2017/lab2/ind
