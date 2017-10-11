@@ -1,4 +1,4 @@
-//https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/
+d//https://www.eriksmistad.no/getting-started-with-google-test-on-ubuntu/
 //https://larry-price.com/blog/2013/10/13/installing-gtest-and-gmock-libs-in-ubuntu-13-dot-04/
 //http://www.bogotobogo.com/cplusplus/google_unit_test_gtest.php
 
