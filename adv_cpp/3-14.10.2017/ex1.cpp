@@ -51,8 +51,10 @@ public:
 		return this->data[n];
 	}
 
+	//co ma dodawać? 
 	String& operator+=(Char c){
-
+		this -> data.push_back(c);
+		return *this;
 	}
 
 	String& print_data(){
@@ -68,6 +70,8 @@ public:
 	template<typename OtherChar>
 	String& operator+(const String<OtherChar>&){
 
+
+		return *this;
 	}
 
 private:
@@ -88,6 +92,9 @@ int main(void){
 	String<char> st(testdata);
 	st.print_data();
 	std::cout << st[1] << std::endl;
+	const char smt = 'a';
+	st += smt;
+	st.print_data();
 
     return 0;
 }

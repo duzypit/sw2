@@ -10,6 +10,11 @@
    
 // Complex minmax(Complex a, Complex b, Complex c);
 
+// int minimax(int a, int b, int c){
+//     if (a >c && a > b) return a;
+//     /*...*/
+// }
+
 //rozwiązanie jest bardzo proste
 template<typename T>
 T minmax(T a, T b, T c){
@@ -19,10 +24,7 @@ T minmax(T a, T b, T c){
 
 int main(void){
 
-    // int minimax(int a, int b, int c){
-    //     if (a >c && a > b) return a;
-    //     /*...*/
-    // }
+
 
 
 

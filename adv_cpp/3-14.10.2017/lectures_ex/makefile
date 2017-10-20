@@ -4,6 +4,8 @@ l1_4:
 l3_3:
 	g++ -Wall -Wextra l3_3.cpp -std=c++14
 
+l4_3:
+	g++ -Wall -Wextra l4_3.cpp -std=c++14
 
 run:
 	./a.out
