@@ -1,0 +1,7 @@
+https://github.com/google/googletest/blob/master/googlemock/docs/ForDummies.md
+dwie metody zaślepiania
+przez stub
+albo gmock mock shape na przykadzie
+
+w rectangle
+dodajemy metodę która będzie dodawać dwie liczby i ją testujemy
