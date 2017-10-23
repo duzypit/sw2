@@ -7,6 +7,7 @@
 #include <iostream>
 #include <vector>
 #include <array>
+#include <algorithm>
 
 template<std::size_t size, typename T, bool use_heap>
 class Array{
@@ -32,17 +33,25 @@ public:
 		}
 	}
 
-	// begin(){
-
+	// iterator begin(){
+	// 	if(this->heap){
+	// 		return this->_vector.begin();
+	// 	} else {
+	// 		return this->_array.begin();
+	// 	}
 	// }
 
 	// end(){
 
 	// }
 
-	// max(){
-
-	// }
+	T max(){
+		if(this->heap){
+			return std::max_element(this->_vector.begin(), this->_vector.end());
+		} else {
+			return std::max_element(this->_array.begin(), this->_array.end());
+		}
+	}
 
 	// min(){
 
@@ -59,7 +68,7 @@ private:
 int main(void){
 
 	Array<10, int, 0> test;
-	std::cout << test[1] <<std::endl;
+	std::cout << test.max() <<std::endl;
 
     return 0;
 }
