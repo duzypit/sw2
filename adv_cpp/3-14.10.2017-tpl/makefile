@@ -7,6 +7,9 @@ ex2:
 ex3:
 	g++ -Wall -Wextra ex3.cpp -std=c++11
 
+ex4:
+	g++ -Wall -Wextra ex4.cpp -std=c++11
+
 run:
 	./a.out
 

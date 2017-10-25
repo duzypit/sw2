@@ -1,6 +1,9 @@
 #include <iostream>
 //function templates
 //co tu się dzieje?
+
+
+//obie funkcje z tpl są zbliżone i kompilator nie wie której użyć 
 // template<typename T>
 // void print(T t){
 // 	std::cout << "template t: " << t << std::endl;

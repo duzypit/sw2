@@ -27,6 +27,9 @@ l6_10:
 
 l6_13:
 	g++ -Wall -Wextra l6_13.cpp -std=c++14
+
+l6_15:
+	g++ -Wall -Wextra l6_15.cpp -std=c++14
 run:
 	./a.out
 
