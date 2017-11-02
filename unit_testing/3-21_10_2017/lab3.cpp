@@ -28,7 +28,7 @@ class Mock_Shape : public IShape
 class LabTestClass : public Test
 {
 public:
-    Picture myPicture;
+    Pic
 
     virtual void SetUp()
     {
@@ -56,7 +56,7 @@ TEST_F(LabTestClass, TestShape)
             //.WillOnce(Return(10))
             .WillOnce(Return(20));
     myPicture.addShape(&myMock);
-    
+
     EXPECT_EQ(20, myPicture.getTotalArea());
     //EXPECT_EQ(10, myPicture.getTotalArea());
 }
