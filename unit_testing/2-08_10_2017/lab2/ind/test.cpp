@@ -1,6 +1,5 @@
 #include <iostream>
-#include "/home/test/sw2/unit_testing/2-08_10_2017/lab2/gtest/googlemock/include/gmock/gmock.h"
-
+#include "gmock/gmock.h"
 #include "Picture.hpp"
 #include "Rectangle.hpp"
 using namespace testing;
