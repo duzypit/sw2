@@ -1,0 +1,36 @@
+#HowTo - podłączenie google mock bez użycia qtcreatora.
+#Instrukcja dla Ubuntu, na bank działa w 13.04+
+
+
+#jeśli nie masz cmake
+sudo apt-get install cmake
+
+
+1. Instalacja gmock (ma w sobie google test)
+
+sudo apt-get install google-mock
+cd /usr/src/gmock
+sudo cmake CMakeLists.txt
+sudo make
+sudo cp *.a /usr/lib
+#w tym momencie masz już katalog /usr/include/gmock
+
+
+2. Dołącz nagłówek gmock.h do swojego kodu
+
+#include "gmock/gmock.h"
+
+
+3. Funkcja main w twoim kodzie:
+
+int main(int argc, char **argv)
+{
+  ::testing::InitGoogleTest(&argc, argv);
+  return RUN_ALL_TESTS();
+}
+
+
+3. Kompilacja dodaj statyczne biblioteki -pthread -lgtest
+
+g++ -Wall -Wextra Picture.cpp Rectangle.cpp Triangle.cpp test.cpp -std=c++11 -pthread -lgtest
+
