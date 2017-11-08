@@ -1,46 +1,4 @@
-// #include <gtest/gtest.h>
-// #include "gmock/gmock.h"
-
-// #include <gmock/gmock-matchers.h>
-// #include "../../../src/Picture.hpp"
-// #include "../../../src/Rectangle.hpp"
-// #include "../../../src/IShape.hpp"
-
 #include <iostream>
-
-
-#include "gmock/gmock.h"
-
-#include "gtest/gtest.h"
-
-#include "Picture.hpp"
-#include "Rectangle.hpp"
-#include "IShape.hpp"
-
-using namespace testing;
-
-class Mock_Shape : public IShape
-{
-    public:
-        MOCK_METHOD0(getArea, double());
-};
-
-class LabTestClass : public Test
-{
-public:
-    Pic
-
-    virtual void SetUp()
-    {
-
-    }
-    virtual void TearDown()
-    {
-
-    }
-};
-
-TEST_F(LabTestClass, TestNOK)
 {
     Rectangle rec1(2,4);
     myPicture.addShape(&rec1);
