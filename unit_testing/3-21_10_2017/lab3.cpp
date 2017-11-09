@@ -21,16 +21,18 @@ TEST(Picture, TestRectangle) {
     EXPECT_EQ(ret, 8);
 }
 
-TEST(Mock_Shape, TestShape) {
+TEST(Mock_Shape, TestGetArea) {
+//Zadanie domowe: dodać dodatkową metodę liczącą obwód wszystkich figur (w klasie Picture) i
+//jej przetestownie. Podobnie jak w przypadku getTotalArea metoda ma korzystać z zewnętrznego
+//interfejsu IShape. To jest ta zależnosc dla której trzeba napisać atrapę (mock lub stub)
+
     Mock_Shape myMock;
     Picture myPicture;
     EXPECT_CALL(myMock, getArea())
-            //.WillOnce(Return(10))
-            .WillOnce(Return(20));
+            .WillRepeatedly(Return(200));
     myPicture.addShape(&myMock);
 
-    EXPECT_EQ(20, myPicture.getTotalArea());
-    //EXPECT_EQ(10, myPicture.getTotalArea());
+    EXPECT_EQ(200, myPicture.getTotalArea());
 }
 
 int main(int argc, char **argv) {
