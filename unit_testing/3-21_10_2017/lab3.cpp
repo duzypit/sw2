@@ -5,6 +5,13 @@
 #include "Rectangle.hpp"
 #include "Picture.hpp"
 
+using ::testing::Return;
+
+class Mock_Shape : public IShape {
+public:
+    MOCK_METHOD0(getArea, double());
+};
+
 TEST(Picture, TestRectangle) {
     Picture myPicture;
     Rectangle rec1(2,4);
@@ -14,8 +21,9 @@ TEST(Picture, TestRectangle) {
     EXPECT_EQ(ret, 8);
 }
 
-TEST_F(Mock_Shape, TestShape) {
+TEST(Mock_Shape, TestShape) {
     Mock_Shape myMock;
+    Picture myPicture;
     EXPECT_CALL(myMock, getArea())
             //.WillOnce(Return(10))
             .WillOnce(Return(20));

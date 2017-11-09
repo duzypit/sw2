@@ -8,4 +8,5 @@ class IShape
 		virtual double getArea() = 0;
 };
 
+
 #endif
