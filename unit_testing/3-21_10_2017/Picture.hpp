@@ -11,6 +11,7 @@ class Picture
 		~Picture();
 		void addShape(IShape* shape);
 		double getTotalArea();
+        double getTotalCircuit();
 
 	private:
 		std::vector<IShape*> _vec_shapes;

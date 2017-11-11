@@ -13,9 +13,22 @@ double Picture::getTotalArea()
 {
 	double retVal = 0.0;
 
-	for(auto sh : _vec_shapes) 
+	for(auto sh : _vec_shapes)
 	{
 		double temp = sh->getArea();
+		if(temp > 0)
+			retVal += temp;
+	}
+
+	return retVal;
+}
+
+double Picture::getTotalCircuit()
+{
+    double retVal = 0.0;
+	for(auto sh : _vec_shapes)
+	{
+		double temp = sh->getCircuit();
 		if(temp > 0)
 			retVal += temp;
 	}

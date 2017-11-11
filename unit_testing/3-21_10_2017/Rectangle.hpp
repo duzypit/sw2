@@ -3,14 +3,14 @@
 
 #include "IShape.hpp"
 
-class Rectangle : public IShape 
+class Rectangle : public IShape
 {
 	public:
 		Rectangle(int a, int b);
 		~Rectangle();
 
 		double getArea() override;
-	
+        double getCircuit() override;
 	private:
 		int _a, _b;
 };

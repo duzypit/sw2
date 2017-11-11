@@ -6,6 +6,7 @@ class IShape
 	public:
 		virtual ~IShape() {}
 		virtual double getArea() = 0;
+        virtual double getCircuit() = 0;
 };
 
 
