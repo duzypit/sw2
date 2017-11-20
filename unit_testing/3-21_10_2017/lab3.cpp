@@ -23,6 +23,18 @@ TEST(Picture, TestRectangle) {
 }
 
 TEST(Mock_Shape, TestGetArea) {
+    Mock_Shape myMock;
+    Picture myPicture;
+
+    EXPECT_CALL(myMock, getArea())
+        .WillRepeatedly(Return(200));
+
+    myPicture.addShape(&myMock);
+
+    EXPECT_EQ(200, myPicture.getTotalArea()) << "Mock_Shape GetTotalArea failed";
+}
+
+TEST(Mock_shape, TestGetCircuit){
 //Zadanie domowe: dodać dodatkową metodę liczącą obwód wszystkich figur (w klasie Picture) i
 //jej przetestownie. Podobnie jak w przypadku getTotalArea metoda ma korzystać z zewnętrznego
 //interfejsu IShape. To jest ta zależnosc dla której trzeba napisać atrapę (mock lub stub)
@@ -30,16 +42,15 @@ TEST(Mock_Shape, TestGetArea) {
     Mock_Shape myMock;
     Picture myPicture;
 
-    EXPECT_CALL(myMock, getArea())
-        .WillRepeatedly(Return(200));
 
     EXPECT_CALL(myMock, getCircuit())
         .WillRepeatedly(Return(100));
+
     myPicture.addShape(&myMock);
 
-    EXPECT_EQ(200, myPicture.getTotalArea());
-    EXPECT_EQ(100, myPicture.getTotalCircuit());
+    EXPECT_EQ(100, myPicture.getTotalCircuit()) << "Mock_Shape getTotalCircuitFailed";
 }
+
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleMock(&argc, argv);
