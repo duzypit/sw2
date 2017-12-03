@@ -1,0 +1,1 @@
+cykl życia funkcji wirtualnej od zakonczenia konstruktora do rozpoczecia destruktora
