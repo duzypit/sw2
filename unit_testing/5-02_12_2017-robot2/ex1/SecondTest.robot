@@ -1,4 +1,5 @@
 *** Settings ***
+
 Documentation     This is a basic test documentation for second testl
 Library           Selenium2Library
 
@@ -29,9 +30,9 @@ Launch Browser
     Maximize Browser Window
 Search Site On Google
     Input Text    id=lst-ib    ${APP}
-    Press Key    name=q    \\13
+    Press Key    name=q    \\13cd
 Launch Site
     Wait Until Element Is Visible    link=Robot Framework      20 Seconds
     Click Element     link=Robot Framework
 Check Site
-    Page Should Contain  http://robotframework.org/    20 Seconds
+    Page Should Contain  http://robotframework.org/    20 Seconds<F2>
