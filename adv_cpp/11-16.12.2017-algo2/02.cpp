@@ -1,16 +1,25 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+//http://slides.com/uczelnia_bt_kw/stl-2#/4/2
+
+/*
+Implement for_each that prints a container
+
+    with free function
+    with predicate
+    with lambda
+*/
+
+
 
 template<typename T>
 void print(T && c){
-	// auto p = [](const auto& n) { std::cout << " " << n; };
 	std::cout << "[ ";
 	auto endIt = std::end(c);
 	std::advance(endIt, -1);
-	//std::for_each(std::begin(c), std::end(c), [](typename T::value_type val) {});
 	std::for_each(std::begin(c), endIt, [](auto val) {
-		std::cout << val << ", ";	
+		std::cout << val << ", ";
 	});
 	std::cout << *(endIt);
 	std::cout << " ]" << std::endl;

@@ -2,7 +2,15 @@
 #include <iostream>
 #include <algorithm>
 #include <string>
-//size_t - uniwersalnie używane do rozmiaru/indeksów
+//http://slides.com/uczelnia_bt_kw/stl-2#/5/10
+/*
+excercise
+Implement a function that
+checks if a string is palindrome
+using std::mismatch/std::equal
+*/
+
+
 bool pali (std::string s1){
 
 	return std::equal(s1.begin(), s1.end(), s1.rbegin(), s1.rend());

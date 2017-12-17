@@ -1,6 +1,14 @@
 #include <iostream>
 #include <algorithm>
 #include <list>
+//http://slides.com/uczelnia_bt_kw/stl-2#/3/5
+
+/*
+Implement a function that inserts values from 1 to 10 to a list
+
+    use function object
+    use std::generate
+*/
 
 struct gen{
 	int operator()(){return ++_val;};
@@ -9,14 +17,10 @@ struct gen{
 
 std::list<int> foo() {
 	std::list <int> obj;
-	//obj.resize(10);
-	//gen g;
 	int counter = 0;
-	//std::generate_n(std::back_inserter,obj, 10, g);
-	//std::generate(obj.begin(), obj.end(), g);
 	std::generate_n(std::back_inserter(obj), 10, [&counter]() mutable { return ++counter; });
 	return obj;
-	
+
 
 }
 
