@@ -21,13 +21,77 @@ class Matrix{
 public:
 	//default ctor
 	Matrix() : _data(N*M) {
-        std::cout << "base class w/o spec" << std::endl;
+    //    std::cout << "base class w/o spec" << std::endl;
     }
 
 	//copy ctor
 /*  template<int N1, int M1, typename T1>
 	Matrix(const Matrix<N1,M1,T1>&) {}b
 */
+    //move ctor
+
+    //add op
+    template<std::size_t N1, std::size_t M1, typename T1>
+    Matrix<N,M,T> operator+(const Matrix<N1,M1,T1>& rhs){
+        if(!std::is_convertible<T, T1>::value){
+            throw std::runtime_error("Martix add: type of second matrix is not convertiblel");
+        }
+
+        if(N != N1 || M != M1){
+            throw std::runtime_error("Matrix add: size mismatch");
+        }
+
+        Matrix<N, M, T> tmp;
+
+        std::size_t row = 0;
+        std::size_t col = 0;
+        for(const auto& v : _data){
+
+            tmp(row, col) = v + rhs(row,col);
+            ++col;
+            if(col >= M){
+                col = 0;
+                ++row;
+            }
+
+        }
+
+        return tmp;
+
+    };
+
+    //multiply op
+    template<std::size_t N1, std::size_t M1, typename T1>
+    Matrix<M,N1,T> operator*(const Matrix<N1,M1,T1>& rhs) {
+        if(!std::is_convertible<T, T1>::value){
+            throw std::runtime_error("Martix multiply: type of second matrix is not convertiblel");
+        }
+
+        if(N != M1){
+            throw std::runtime_error("Matrix multiply: size mismatch");
+        }
+
+        Matrix<M, N1, T> tmp;
+        std::size_t row;
+        std::size_t col;
+        std::size_t inner;
+        for(row = 0; row < N; row++){
+            for(col = 0; col < M1; col++){
+                for(inner = 0; inner < M+1; inner++){
+                    tmp(row, inner) += this->_data[this->_cols * row + inner] * rhs(inner, col);
+                }
+            }
+        }
+
+        return tmp;
+
+    }
+
+
+    //scalar add op
+
+
+    //scalar multiply op
 
 
     T operator[](int index) const{
@@ -41,9 +105,10 @@ public:
     T operator() (std::size_t row, std::size_t col) const{
         if(row <= this->_rows && col <= this->_cols){
             return this->_data[this->_cols *row + col];
-        } else {
-            throw std::runtime_error("wrong boundariew");
         }
+
+        throw std::runtime_error("wrong boundaries");
+
     }
 
     T& operator() (const std::size_t row, const std::size_t col){
@@ -69,21 +134,11 @@ public:
         return os;
 	}
 
-/*
-    Matrix& operator=(const Matrix& m);
-*/
-/*
-	Matrix& operator+(const Matrix<N,M,T>& rhs){
 
-	}
-*/
-
-    //for testing only
     void fill(T val){
         std::fill(this->_data.begin(), this->_data.begin()+(N*M), val);
     }
 
-    //for testing only
     void printData(){
         for(auto v : this->_data){
             std::cout << v << " ";
@@ -116,21 +171,35 @@ public:
 };
 
 int main(){
+    /*
     //spec for 0,0
     Matrix <0,0,int> intz;
     //spec for bool - error, spec don't work
     Matrix<1, 1, bool> boolz;
-
-    Matrix<2,2, int> proper;
+*/
+    Matrix<2,3, int> proper;
     //indirect use of operator[]
-    proper(0,0) = 0;
-    proper(0,1) = 1;
+    proper(0,0) = 1;
+    proper(0,1) = 5;
+    proper(0,2) = 0;
     proper(1,0) = 2;
-    proper(1,1) = 3;
+    proper(1,1) = -3;
+    proper(1,2) = 1;
 
     //operator<<
-    std::cout << proper << std::endl;
+//    std::cout << proper << std::endl;
 
+
+    Matrix<3,2, int> m1;
+    m1(0,0) = 0;
+    m1(0,1) = -2;
+    m1(1,0) = 1;
+    m1(1,1) = 1;
+    m1(2,0) = 3;
+    m1(2,1) = 4;
+
+    auto m2 = m1 * proper;
+    std::cout << m2 << std::endl;
     return 0;
 
 
