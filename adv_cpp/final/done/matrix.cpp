@@ -2,13 +2,13 @@
 Matrix<M,N,T>
 Napisać implementację:
 posiada operatory:
-dodawania macierzy (+)
-    mnożenia macierzy (+)
-    dodawania skalara do macierzy (+)
-    mnożenia macierzy przez skalar (+)
+x dodawania macierzy (+)
+x mnożenia macierzy (+)
+xdodawania skalara do macierzy (+)
+xmnożenia macierzy przez skalar (+)
     dostarcza konstruktory:
-    domyślny
-    kopiujący (+)
+xdomyślny
+xkopiujący (+)
     przesuwający*
 
     Zadanie dodatkowe: gdzie występuje (+) implementacja ma działać dla typu T1 który jest konwertowalny do typu T
@@ -22,20 +22,27 @@ class Matrix{
 public:
 	//default ctor
 	Matrix() : _data(N*M) {}
-
+    ~Matrix(){};
 	//copy ctor
     template<std::size_t N1, std::size_t M1, typename T1>
 	Matrix(const Matrix<N1,M1,T1>& rhs) {
         if(!std::is_convertible<T, T1>::value){
-            throw std::runtime_error("Martix copy ctor: type of second matrix is not convertiblel");
+            throw std::runtime_error("Martix copy ctor: type of second matrix is not convertible");
         }
         _rows = rhs._rows;
         _cols = rhs._cols;
         _data = rhs._data;
-
     }
 
     //move ctor
+    template<std::size_t N1, std::size_t M1, typename T1>
+    Matrix(Matrix<N1,M1,T1>&& rhs) : _data(N1*M1){
+        _rows = rhs._rows;
+        _cols = rhs._cols;
+        _data = rhs._data;
+        rhs._data.clear();
+
+    }
 
     //add op
     template<std::size_t N1, std::size_t M1, typename T1>
@@ -53,16 +60,13 @@ public:
         std::size_t row = 0;
         std::size_t col = 0;
         for(const auto& v : _data){
-
             tmp(row, col) = v + rhs(row,col);
             ++col;
             if(col >= M){
                 col = 0;
                 ++row;
             }
-
         }
-
         return tmp;
     };
 
@@ -99,11 +103,8 @@ public:
 
     //scalar add op
     template<typename T1>
-    Matrix<N,M,T> operator+(const T1& rhs){
-        if(!std::is_convertible<T, T1>::value){
-            throw std::runtime_error("Martix multiply: type of second matrix is not convertiblel");
-        }
-
+    Matrix<N,M,T> operator+(const T1&){
+            throw std::runtime_error("Martix + scalar: cant touch this ;)");
     }
 
 
@@ -285,32 +286,28 @@ TEST(Matrix, Matrix_multiplication_by_scalar){
     EXPECT_EQ(m2(1,1), 5);
 }
 
-/*
-TEST(Matrix, M2MAdd){
-    Matrix<2,3, int> m1;
-    m1(0,0) = 0;
-    m1(0,1) = -2;
-    m1(1,0) = 1;
-    m1(1,1) = 1;
-    m1(2,0) = 3;
-    m1(2,1) = 4;
+TEST(Matrix, Matrix_add_scalar){
 
-
-    Matrix<2,3, float> m2;
-    m2(0,0) = 1.0;
-    m2(0,1) = 5.0;
-    m2(0,2) = 0.0;
-    m2(1,0) = 2.0;
-    m2(1,1) = -3.0;
-    m2(1,2) = 1.0;
-
-    auto m3 = m1 + m2;
-    std::cout<< m3 << std::endl;
-    //EXPECT_EQ(1, 1);
-    EXPECT_EQ(m3(0,0), 1);
+    Matrix<2,2,int> m;
+    int scalar = 5;
+    try{
+        auto exMatrix = m + scalar;
+    } catch (std::runtime_error const& e){
+        EXPECT_EQ(e.what(), std::string("Martix + scalar: cant touch this ;)"));
+    }
 }
-*/
 
+TEST(Matrix, Move_ctor){
+    Matrix<2,2, int> m1;
+    m1(0,0) = 1;
+    m1(0,1) = 1;
+    m1(1,0) = 1;
+    m1(1,1) = 5;
+
+    auto m2(std::move(m1));
+
+    EXPECT_EQ(m2(1,1), 5);
+}
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
