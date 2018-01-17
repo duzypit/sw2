@@ -15,14 +15,13 @@ dodawania macierzy (+)
 */
 #include <iostream>
 #include <vector>
+#include <gtest/gtest.h>
 
 template<std::size_t N, std::size_t M, typename T>
 class Matrix{
 public:
 	//default ctor
-	Matrix() : _data(N*M) {
-    //    std::cout << "base class w/o spec" << std::endl;
-    }
+	Matrix() : _data(N*M) {}
 
 	//copy ctor
 /*  template<int N1, int M1, typename T1>
@@ -57,12 +56,11 @@ public:
         }
 
         return tmp;
-
     };
 
     //multiply op
     template<std::size_t N1, std::size_t M1, typename T1>
-    Matrix<M,N1,T> operator*(const Matrix<N1,M1,T1>& rhs) {
+    Matrix<M1,N,T> operator*(const Matrix<N1,M1,T1>& rhs) {
         if(!std::is_convertible<T, T1>::value){
             throw std::runtime_error("Martix multiply: type of second matrix is not convertiblel");
         }
@@ -71,15 +69,20 @@ public:
             throw std::runtime_error("Matrix multiply: size mismatch");
         }
 
-        Matrix<M, N1, T> tmp;
+        Matrix<M1, N, T> tmp;
         std::size_t row;
         std::size_t col;
         std::size_t inner;
-        for(row = 0; row < N; row++){
-            for(col = 0; col < M1; col++){
-                for(inner = 0; inner < M+1; inner++){
-                    tmp(row, inner) += this->_data[this->_cols * row + inner] * rhs(inner, col);
+        for(row = 0; row != N; ++row){
+            for(col = 0; col != M1; ++col){
+                T sum = 0;
+                for(inner = 0; inner != M1; ++inner){
+                    //std::cout<< row << "," << inner << " += " << row << "," << inner << " * " << inner << "," << row << std::endl;
+                    //std::cout << "Multi: " << this->_data[this->_cols * row + inner] << " * " << rhs(inner, col) << std::endl;
+                    std::cout << "row " << row << ", col " << col << ", inner " << inner << ", m1 val " << (*this)(row, inner) << ", m2 val " << rhs(inner,col) << std::endl;
+                    sum += ((*this)(row,inner) * rhs(inner,col));
                 }
+                tmp(row,col) = sum;
             }
         }
 
@@ -145,6 +148,7 @@ public:
         }
         std::cout << std::endl;
     }
+
 private:
     std::size_t _rows = N;
     std::size_t _cols = M;
@@ -169,14 +173,14 @@ public:
         std::cout << "Matrix for N = 0 && M =0 cannot be created!" << std::endl;
 	}
 };
-
+/*
 int main(){
     /*
     //spec for 0,0
     Matrix <0,0,int> intz;
     //spec for bool - error, spec don't work
     Matrix<1, 1, bool> boolz;
-*/
+
     Matrix<2,3, int> proper;
     //indirect use of operator[]
     proper(0,0) = 1;
@@ -203,4 +207,60 @@ int main(){
     return 0;
 
 
+}*/
+
+TEST(Matrix, M2MMultiply){
+    Matrix<2,3, int> m1;
+    m1(0,0) = 1;
+    m1(0,1) = 1;
+    m1(0,2) = 1;
+    m1(1,0) = 1;
+    m1(1,1) = 1;
+    m1(1,2) = 1;
+
+
+    Matrix<3,2, float> m2;
+    m2(0,0) = 1.0;
+    m2(0,1) = 1.0;
+    m2(1,0) = 1.0;
+    m2(1,1) = 1.0;
+    m2(2,0) = 1.0;
+    m2(2,1) = 1.0;
+
+    auto m3 = m1 * m2;
+    std::cout<< m3 << std::endl;
+    //EXPECT_EQ(m3(0,0), 1);
+    //EXPECT_EQ(m3(0,0), 1);*/
+}
+
+/*
+TEST(Matrix, M2MAdd){
+    Matrix<2,3, int> m1;
+    m1(0,0) = 0;
+    m1(0,1) = -2;
+    m1(1,0) = 1;
+    m1(1,1) = 1;
+    m1(2,0) = 3;
+    m1(2,1) = 4;
+
+
+    Matrix<2,3, float> m2;
+    m2(0,0) = 1.0;
+    m2(0,1) = 5.0;
+    m2(0,2) = 0.0;
+    m2(1,0) = 2.0;
+    m2(1,1) = -3.0;
+    m2(1,2) = 1.0;
+
+    auto m3 = m1 + m2;
+    std::cout<< m3 << std::endl;
+    //EXPECT_EQ(1, 1);
+    EXPECT_EQ(m3(0,0), 1);
+}
+*/
+
+
+int main(int argc, char **argv) {
+    ::testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
