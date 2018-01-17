@@ -24,9 +24,17 @@ public:
 	Matrix() : _data(N*M) {}
 
 	//copy ctor
-/*  template<int N1, int M1, typename T1>
-	Matrix(const Matrix<N1,M1,T1>&) {}b
-*/
+    template<std::size_t N1, std::size_t M1, typename T1>
+	Matrix(const Matrix<N1,M1,T1>& rhs) {
+        if(!std::is_convertible<T, T1>::value){
+            throw std::runtime_error("Martix copy ctor: type of second matrix is not convertiblel");
+        }
+        _rows = rhs._rows;
+        _cols = rhs._cols;
+        _data = rhs._data;
+
+    }
+
     //move ctor
 
     //add op
@@ -60,7 +68,7 @@ public:
 
     //multiply op
     template<std::size_t N1, std::size_t M1, typename T1>
-    Matrix<M1,N,T> operator*(const Matrix<N1,M1,T1>& rhs) {
+    Matrix<N,M,T> operator*(const Matrix<N1,M1,T1>& rhs) {
         if(!std::is_convertible<T, T1>::value){
             throw std::runtime_error("Martix multiply: type of second matrix is not convertiblel");
         }
@@ -69,18 +77,16 @@ public:
             throw std::runtime_error("Matrix multiply: size mismatch");
         }
 
-        Matrix<M1, N, T> tmp;
+        Matrix<N, M, T> tmp;
         std::size_t row;
         std::size_t col;
         std::size_t inner;
-        for(row = 0; row != N; ++row){
-            for(col = 0; col != M1; ++col){
+        std::size_t innerMax = N1;
+        for(row = 0; row < N; ++row){
+            for(col = 0; col < M; ++col){
                 T sum = 0;
-                for(inner = 0; inner != M1; ++inner){
-                    //std::cout<< row << "," << inner << " += " << row << "," << inner << " * " << inner << "," << row << std::endl;
-                    //std::cout << "Multi: " << this->_data[this->_cols * row + inner] << " * " << rhs(inner, col) << std::endl;
-                    std::cout << "row " << row << ", col " << col << ", inner " << inner << ", m1 val " << (*this)(row, inner) << ", m2 val " << rhs(inner,col) << std::endl;
-                    sum += ((*this)(row,inner) * rhs(inner,col));
+                for(inner = 0; inner < innerMax; ++inner){
+                    sum += ((*this)(row,inner) * rhs(inner,row));
                 }
                 tmp(row,col) = sum;
             }
@@ -92,9 +98,40 @@ public:
 
 
     //scalar add op
+    template<typename T1>
+    Matrix<N,M,T> operator+(const T1& rhs){
+        if(!std::is_convertible<T, T1>::value){
+            throw std::runtime_error("Martix multiply: type of second matrix is not convertiblel");
+        }
+
+    }
 
 
     //scalar multiply op
+    template<typename T1>
+    auto operator*(const T1& rhs){
+        if(!std::is_convertible<T, T1>::value){
+            throw std::runtime_error("Martix multiply by scalar: type of scalar is not convertiblel");
+        }
+
+        Matrix<N,M,T> tmp;
+        std::size_t row = 0;
+        std::size_t col = 0;
+
+        for(auto v : _data){
+            T x = v * rhs;
+            tmp(row,col) = x;
+            ++col;
+            if(col == _cols){
+                col = 0;
+                ++row;
+            }
+        }
+
+        return tmp;
+
+    }
+
 
 
     T operator[](int index) const{
@@ -124,13 +161,12 @@ public:
 
 	friend std::ostream& operator<<(std::ostream& os, const Matrix<N,M,T>& mat){
             std::size_t currentCol = 0;
-            //tutaj wyłącznie for(;;) nie range loop
             for(auto v : mat._data){
-                currentCol++;
-                if(currentCol > mat._cols){
+                if(currentCol == mat._cols){
                     currentCol = 0;
                     os << std::endl;
                 }
+                currentCol++;
                 os << "  " << v <<  "  ";
             }
 
@@ -173,43 +209,47 @@ public:
         std::cout << "Matrix for N = 0 && M =0 cannot be created!" << std::endl;
 	}
 };
-/*
-int main(){
-    /*
-    //spec for 0,0
-    Matrix <0,0,int> intz;
-    //spec for bool - error, spec don't work
-    Matrix<1, 1, bool> boolz;
 
-    Matrix<2,3, int> proper;
-    //indirect use of operator[]
-    proper(0,0) = 1;
-    proper(0,1) = 5;
-    proper(0,2) = 0;
-    proper(1,0) = 2;
-    proper(1,1) = -3;
-    proper(1,2) = 1;
-
-    //operator<<
-//    std::cout << proper << std::endl;
-
-
-    Matrix<3,2, int> m1;
-    m1(0,0) = 0;
-    m1(0,1) = -2;
+TEST(Matrix, M2M_add){
+    Matrix<2,2, int> m1;
+    m1(0,0) = 1;
+    m1(0,1) = 1;
     m1(1,0) = 1;
     m1(1,1) = 1;
-    m1(2,0) = 3;
-    m1(2,1) = 4;
 
-    auto m2 = m1 * proper;
-    std::cout << m2 << std::endl;
-    return 0;
+    Matrix<2,2, float> m2;
+    m2(0,0) = 2.0;
+    m2(0,1) = 2.0;
+    m2(1,0) = 2.0;
+    m2(1,1) = 2.0;
+
+    auto m3 = m1+m2;
+
+    EXPECT_EQ(m3(1,1),3);
+
+}
 
 
-}*/
 
-TEST(Matrix, M2MMultiply){
+TEST(Matrix, M2M_Multiply_same_size){
+    Matrix<2,2, int> m1;
+    m1(0,0) = 1;
+    m1(0,1) = 1;
+    m1(1,0) = 1;
+    m1(1,1) = 1;
+
+    Matrix<2,2, float> m2;
+    m2(0,0) = 1.0;
+    m2(0,1) = 1.0;
+    m2(1,0) = 1.0;
+    m2(1,1) = 1.0;
+
+    auto m3 = m1*m2;
+    EXPECT_EQ(m3(1,1),2);
+
+}
+
+TEST(Matrix, M2M_Multiply_dif_size){
     Matrix<2,3, int> m1;
     m1(0,0) = 1;
     m1(0,1) = 1;
@@ -227,10 +267,22 @@ TEST(Matrix, M2MMultiply){
     m2(2,0) = 1.0;
     m2(2,1) = 1.0;
 
+
     auto m3 = m1 * m2;
-    std::cout<< m3 << std::endl;
-    //EXPECT_EQ(m3(0,0), 1);
-    //EXPECT_EQ(m3(0,0), 1);*/
+    EXPECT_EQ(m3(1,2), 3);
+}
+
+TEST(Matrix, Matrix_multiplication_by_scalar){
+    Matrix<2,2, int> m1;
+    m1(0,0) = 1;
+    m1(0,1) = 1;
+    m1(1,0) = 1;
+    m1(1,1) = 1;
+
+    float scalar = 5;
+
+    auto m2 = m1 * scalar;
+    EXPECT_EQ(m2(1,1), 5);
 }
 
 /*
