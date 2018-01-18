@@ -23,7 +23,8 @@ public:
 	//default ctor
 	Matrix() : _data(N*M) {}
     ~Matrix(){};
-	//copy ctor
+
+    //copy ctor
     template<std::size_t N1, std::size_t M1, typename T1>
 	Matrix(const Matrix<N1,M1,T1>& rhs) {
         if(!std::is_convertible<T, T1>::value){
@@ -37,6 +38,10 @@ public:
     //move ctor
     template<std::size_t N1, std::size_t M1, typename T1>
     Matrix(Matrix<N1,M1,T1>&& rhs) : _data(N1*M1){
+        if(!std::is_convertible<T, T1>::value){
+            throw std::runtime_error("Martix move ctor: type of second matrix is not convertible");
+        }
+
         _rows = rhs._rows;
         _cols = rhs._cols;
         _data = rhs._data;
@@ -95,18 +100,14 @@ public:
                 tmp(row,col) = sum;
             }
         }
-
         return tmp;
-
     }
-
 
     //scalar add op
     template<typename T1>
     Matrix<N,M,T> operator+(const T1&){
-            throw std::runtime_error("Martix + scalar: cant touch this ;)");
+            throw std::runtime_error("Martix + scalar: op is forbidden ;)");
     }
-
 
     //scalar multiply op
     template<typename T1>
@@ -128,12 +129,8 @@ public:
                 ++row;
             }
         }
-
         return tmp;
-
     }
-
-
 
     T operator[](int index) const{
         return this->_data[index];
@@ -148,16 +145,14 @@ public:
             return this->_data[this->_cols *row + col];
         }
 
-        throw std::runtime_error("wrong boundaries");
-
+        throw std::out_of_range("operator(): target id out of range");
     }
 
     T& operator() (const std::size_t row, const std::size_t col){
        if(row <= this->_rows && col <= this->_cols){
             return this->_data[this->_cols *row + col];
-        } else {
-            throw std::runtime_error("wrong boundaries");
         }
+            throw std::out_of_range("operator(): target id out of range");
     }
 
 	friend std::ostream& operator<<(std::ostream& os, const Matrix<N,M,T>& mat){
@@ -170,7 +165,6 @@ public:
                 currentCol++;
                 os << "  " << v <<  "  ";
             }
-
         return os;
 	}
 
@@ -178,14 +172,14 @@ public:
     void fill(T val){
         std::fill(this->_data.begin(), this->_data.begin()+(N*M), val);
     }
-
+/*
     void printData(){
         for(auto v : this->_data){
             std::cout << v << " ";
         }
         std::cout << std::endl;
     }
-
+*/
 private:
     std::size_t _rows = N;
     std::size_t _cols = M;
@@ -287,14 +281,22 @@ TEST(Matrix, Matrix_multiplication_by_scalar){
 }
 
 TEST(Matrix, Matrix_add_scalar){
-
     Matrix<2,2,int> m;
     int scalar = 5;
-    try{
-        auto exMatrix = m + scalar;
-    } catch (std::runtime_error const& e){
-        EXPECT_EQ(e.what(), std::string("Martix + scalar: cant touch this ;)"));
-    }
+    EXPECT_ANY_THROW(m + scalar);
+}
+
+TEST(Matrix, Copy_ctor){
+    Matrix<2,2, int> m1;
+    m1(0,0) = 1;
+    m1(0,1) = 1;
+    m1(1,0) = 1;
+    m1(1,1) = 4;
+
+    auto m2(m1);
+
+    EXPECT_EQ(m2(1,1), 4);
+
 }
 
 TEST(Matrix, Move_ctor){
