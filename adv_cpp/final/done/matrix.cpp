@@ -172,14 +172,6 @@ public:
     void fill(T val){
         std::fill(this->_data.begin(), this->_data.begin()+(N*M), val);
     }
-/*
-    void printData(){
-        for(auto v : this->_data){
-            std::cout << v << " ";
-        }
-        std::cout << std::endl;
-    }
-*/
 private:
     std::size_t _rows = N;
     std::size_t _cols = M;
