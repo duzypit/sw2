@@ -23,7 +23,7 @@ public:
 	//default ctor
 	Matrix() : _data(N*M) {}
     ~Matrix(){};
-
+/*
     //copy ctor
     template<std::size_t N1, std::size_t M1, typename T1>
 	Matrix(const Matrix<N1,M1,T1>& rhs) {
@@ -34,7 +34,8 @@ public:
         _cols = rhs._cols;
         _data = rhs._data;
     }
-
+*/
+/*
     //move ctor
     template<std::size_t N1, std::size_t M1, typename T1>
     Matrix(Matrix<N1,M1,T1>&& rhs) : _data(N1*M1){
@@ -48,7 +49,7 @@ public:
         rhs._data.clear();
 
     }
-
+*/
     //add op
     template<std::size_t N1, std::size_t M1, typename T1>
     Matrix<N,M,T> operator+(const Matrix<N1,M1,T1>& rhs){
@@ -172,14 +173,7 @@ public:
     void fill(T val){
         std::fill(this->_data.begin(), this->_data.begin()+(N*M), val);
     }
-/*
-    void printData(){
-        for(auto v : this->_data){
-            std::cout << v << " ";
-        }
-        std::cout << std::endl;
-    }
-*/
+
 private:
     std::size_t _rows = N;
     std::size_t _cols = M;

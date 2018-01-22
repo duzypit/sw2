@@ -97,7 +97,6 @@ TEST(CircularBuffer, empty_size_is_zero) {
 }
 
 TEST(CircularBuffer, stream_operator) {
-    //using namespace std::string_literals;
     CircularBuffer<std::string, 2> buffer{{std::string{"one"}}};
     std::stringstream ss;
     ss << buffer;
@@ -124,24 +123,6 @@ TEST(CircularBuffer, size_after_double_push){
     EXPECT_EQ(buffer[0],"dd");
     EXPECT_EQ(buffer.size(), 3);
 }
-
-
-/*
-int main(){
-	CircularBuffer<std::string, 5> buffer{{"one", "two", "three"}};
-
-	std::fill(buffer.begin(), buffer.end(), "seven");
-
-	buffer.push("five");
-	buffer.push("six");
-	buffer.push("one");
-	for(auto& v : buffer){
-		std::cout << "buff val: " << v << std::endl;
-	}
-
-	return 0;
-}
-*/
 
 int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
