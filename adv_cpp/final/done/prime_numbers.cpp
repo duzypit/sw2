@@ -16,22 +16,31 @@ na wejściu dostaje N liczb (czytane z pliku)  (liczby są nie większe niż  92
         https://gmplib.org/manual/Number-Theoretic-Functions.html
 
 */
+
 #include <iostream>
 #include <gtest/gtest.h>
 #include <numeric>
 #include <thread>
 #include <cmath>
 #include <memory>
+#include <gmp.h>
+
 class PNumbers
 {
     public:
-        PNumbers() : _v(10000)
+        PNumbers() : _v(1000000)
         {
             setUp();
             createThreads();
         }
 
-               bool empty()
+        ~PNumbers(){
+/*            for(auto& t: _t){
+                t->join();
+            }
+*/        }
+
+        bool empty()
         {
             return _v.empty();
         }
@@ -58,6 +67,7 @@ class PNumbers
             //std::cout << "No of loaded nums: " << _v.size() << std::endl;
 
             std::iota(std::begin(_v), std::end(_v), 0);
+            std::cout << "Size: " << _v.size() << "Element 99999" << _v[99999] << std::endl;
             _threadNo = std::thread::hardware_concurrency();
 
             return true;
@@ -159,10 +169,11 @@ class PNumbers
             return false;
         }
 
-        // It returns false if n is composite and returns true if n
+        // It returns false if n is composite andzA returns true if n
         // is probably prime.  k is an input parameter that determines
         // accuracy level. Higher value of k indicates more accuracy.
-        bool MillerRabinIsPrime(int n, int k = 4)
+
+        bool MillerRabinIsPrime(int n, int k = 15)
         {
             // Corner cases
             if (n <= 1 || n == 4)  return false;
@@ -214,6 +225,45 @@ class PNumbers
 
             std::cout << "Miller-Rabin method, no of primes: " << noOfPrime << std::endl;
             std::cout << "eta: " << elapsed_seconds.count() << "s\n";
+
+            //mpz_probab_prime
+            std::size_t definietely = 0;
+            std::size_t probably = 0;
+            std::size_t notPrime = 0;
+            int result = 0;
+
+            start = std::chrono::system_clock::now();
+
+            for(std::size_t i = boundaries.first; i < boundaries.second; ++i)
+            {
+                mpz_t n;
+                mpz_init(n);
+                mpz_set_ui(n, _v[i]);
+                result = mpz_probab_prime_p(n, 20);
+                switch(result) {
+                    case 2:
+                        //definitely prime
+                        definietely += 1;
+                        break;
+                    case 1:
+                        //probably prime
+                        probably += 1;
+                        break;
+                    default:
+                        //definitely non-prime
+                        notPrime +=1 ;
+                        break;
+                }
+                mpz_clear(n);
+            }
+
+            end = std::chrono::system_clock::now();
+            elapsed_seconds = end-start;
+
+            std::cout << "Mpz_probab_prime_p method, no of primes: deinitely: " << definietely << ", probably: " << probably << " not prime: " << notPrime  << std::endl;
+
+            std::cout << "eta: " << elapsed_seconds.count() << "s\n";
+
         }
 
         void createThreads()
@@ -235,16 +285,8 @@ class PNumbers
         }
 };
 
-TEST(Pnumbers, load_test)
-{
-    PNumbers p;
-    EXPECT_EQ(p.empty(), false) << "Numbers are not loaded";
-    EXPECT_GT(p.numOfThreadSupported(), 0) << "You have no cores available on your machine";
-
-}
 
 int main(int argc, char **argv) {
-    ::testing::InitGoogleTest(&argc, argv);
-    return RUN_ALL_TESTS();
+    PNumbers p;
 }
 
