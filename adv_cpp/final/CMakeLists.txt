@@ -15,4 +15,5 @@ target_link_libraries(ring_buffer gtest pthread)
 add_executable(prime_numbers ${PROJECT_SOURCE_DIR}/prime_numbers.cpp)
 target_link_libraries(prime_numbers pthread gmp)
 
-
+add_executable(ptr_shared ${PROJECT_SOURCE_DIR}/ptr_shared.cpp)
+#target_link_libraries(ptr_shared pthread)
