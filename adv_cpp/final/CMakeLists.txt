@@ -13,6 +13,6 @@ add_executable(ring_buffer ${PROJECT_SOURCE_DIR}/ring_buffer.cpp)
 target_link_libraries(ring_buffer gtest pthread)
 
 add_executable(prime_numbers ${PROJECT_SOURCE_DIR}/prime_numbers.cpp)
-target_link_libraries(prime_numbers gtest pthread )
+target_link_libraries(prime_numbers pthread gmp)
 
 
