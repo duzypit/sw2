@@ -110,7 +110,7 @@ class Matrix {
             T x = v * rhs;
             tmp(row, col) = x;
             ++col;
-            if (col == _cols) {
+            if (col == M) {
                 col = 0;
                 ++row;
             }
@@ -143,7 +143,7 @@ class Matrix {
                                     const Matrix<N, M, T>& mat) {
         std::size_t currentCol = 0;
         for (auto v : mat._data) {
-            if (currentCol == mat._cols) {
+            if (currentCol == M) {
                 currentCol = 0;
                 os << std::endl;
             }
