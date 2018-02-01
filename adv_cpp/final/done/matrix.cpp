@@ -40,7 +40,7 @@ class Matrix {
 
         Matrix<N, M, T> tmp;
 
-        // Da się zastosować jakiś algorytm STL'a? 
+        // Da się zastosować jakiś algorytm STL'a?
         std::size_t row = 0;
         std::size_t col = 0;
         for (const auto& v : _data) {
@@ -125,16 +125,16 @@ class Matrix {
 
     // Sygnatura funkcji nie do końca prawidłowa
     T operator()(std::size_t row, std::size_t col) const {
-        if (row <= this->_rows && col <= this->_cols) {
-            return this->_data[this->_cols * row + col];
+        if (row <= N && col <= M) {
+            return this->_data[M * row + col];
         }
 
         throw std::out_of_range("operator(): target id out of range");
     }
 
     T& operator()(const std::size_t row, const std::size_t col) {
-        if (row <= this->_rows && col <= this->_cols) {
-            return this->_data[this->_cols * row + col];
+        if (row <= N && col <= M) {
+            return this->_data[M * row + col];
         }
         throw std::out_of_range("operator(): target id out of range");
     }
@@ -159,9 +159,6 @@ class Matrix {
     }
 
    private:
-    // ... Eee po co to ? 
-    std::size_t _rows = N;
-    std::size_t _cols = M;
     //vector??????, Rozmiar jest znany w czasie kompilacji
     std::vector<T> _data;
 };
