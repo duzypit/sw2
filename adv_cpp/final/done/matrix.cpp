@@ -16,23 +16,23 @@ który jest konwertowalny do typu T
 */
 #include <gtest/gtest.h>
 #include <iostream>
-#include <vector>
+#include <array>
+#include <type_traits>
 
 template <std::size_t N, std::size_t M, typename T>
 class Matrix {
    public:
     // default ctor
-    Matrix() : _data(N * M) {}
+    Matrix() : _data() {}
     // Trochę bardziej czytelne
     ~Matrix() = default;
     // add op
     template <std::size_t N1, std::size_t M1, typename T1>
     Matrix<N, M, T> operator+(const Matrix<N1, M1, T1>& rhs) {
         // To powinien być błąd na etapie kompilacji, nie runtime
-        if (!std::is_convertible<T, T1>::value) {
-            throw std::runtime_error(
-                "Martix add: type of second matrix is not convertiblel");
-        }
+        //if (!std::is_convertible<T, T1>::value) {
+            static_assert(!std::is_convertible<T, T1>::value,"Martix add: type of second matrix is not convertible");
+        //}
 
         if (N != N1 || M != M1) {
             throw std::runtime_error("Matrix add: size mismatch");
@@ -160,7 +160,7 @@ class Matrix {
 
    private:
     //vector??????, Rozmiar jest znany w czasie kompilacji
-    std::vector<T> _data;
+    std::array<T, N*M> _data;
 };
 
 template <std::size_t N, std::size_t M>
