@@ -18,6 +18,7 @@ który jest konwertowalny do typu T
 #include <iostream>
 #include <array>
 #include <type_traits>
+#include <algorithm>
 
 template <std::size_t N, std::size_t M, typename T>
 class Matrix {
@@ -26,22 +27,28 @@ class Matrix {
     Matrix() : _data() {}
     // Trochę bardziej czytelne
     ~Matrix() = default;
+    typedef T value_type;
     // add op
     template <std::size_t N1, std::size_t M1, typename T1>
     Matrix<N, M, T> operator+(const Matrix<N1, M1, T1>& rhs) {
         // To powinien być błąd na etapie kompilacji, nie runtime
-        //if (!std::is_convertible<T, T1>::value) {
-            static_assert(!std::is_convertible<T, T1>::value,"Martix add: type of second matrix is not convertible");
-        //}
-
-        if (N != N1 || M != M1) {
-            throw std::runtime_error("Matrix add: size mismatch");
+        if constexpr (!std::is_convertible<T, T1>::value) {
+            static_assert(std::is_convertible<T, T1>::value, "Martix add: type of second matrix is not convertible");
         }
 
-        Matrix<N, M, T> tmp;
+        // To powinien być błąd na etapie kompilacji, nie runtime
+        if (N != N1 || M != M1) {
+            static_assert("Matrix add: size mismatch");
+        }
+
+        //Matrix<N, M, T> tmp;
+        //std::copy(_data.begin(), _data.end(), std::back_inserter(tmp));
+
+        std::transform(_data.begin(), _data.end(), rhs.begin(), rhs.end(), std::plus<T>());
 
         // Da się zastosować jakiś algorytm STL'a?
-        std::size_t row = 0;
+
+        /*std::size_t row = 0;
         std::size_t col = 0;
         for (const auto& v : _data) {
             tmp(row, col) = v + rhs(row, col);
@@ -50,22 +57,22 @@ class Matrix {
                 col = 0;
                 ++row;
             }
-        }
-        return tmp;
-    };
+        }*/
+        return *this;
+    }
 
     // multiply op
     template <std::size_t N1, std::size_t M1, typename T1>
     Matrix<N, M, T> operator*(const Matrix<N1, M1, T1>& rhs) {
         // To powinien być błąd na etapie kompilacji, nie runtime
-        if (!std::is_convertible<T, T1>::value) {
-            throw std::runtime_error(
-                "Martix multiply: type of second matrix is not convertiblel");
+        if constexpr (!std::is_convertible<T, T1>::value) {
+            static_assert(std::is_convertible<T, T1>::value, "Martix multiply: type of second matrix is not convertible");
         }
+
 
         // To powinien być błąd na etapie kompilacji, nie runtime
         if (N != M1) {
-            throw std::runtime_error("Matrix multiply: size mismatch");
+            static_assert("Matrix multiply: size mismatch");
         }
 
         Matrix<N, M, T> tmp;
@@ -119,24 +126,31 @@ class Matrix {
     }
 
     // Sygnatura funkcji nie do końca prawidłowa
-    T operator[](int index) const { return this->_data[index]; }
+    T operator[](const int& index) const { return _data[index]; }
 
-    T& operator[](int index) { return this->_data[index]; }
+    T& operator[](int index) { return _data[index]; }
 
     // Sygnatura funkcji nie do końca prawidłowa
-    T operator()(std::size_t row, std::size_t col) const {
+    T operator()(const std::size_t& row, const std::size_t& col) const {
         if (row <= N && col <= M) {
-            return this->_data[M * row + col];
+            return _data[M * row + col];
         }
-
         throw std::out_of_range("operator(): target id out of range");
     }
 
     T& operator()(const std::size_t row, const std::size_t col) {
         if (row <= N && col <= M) {
-            return this->_data[M * row + col];
+            return _data[M * row + col];
         }
         throw std::out_of_range("operator(): target id out of range");
+    }
+
+    auto begin(){
+        return _data.begin();
+    }
+
+    auto end(){
+        return _data.end();
     }
 
     friend std::ostream& operator<<(std::ostream& os,
@@ -155,13 +169,14 @@ class Matrix {
 
     // Jeżeli T =float, to nie mogę zrobić T(0)
     void fill(T val) {
-        std::fill(this->_data.begin(), this->_data.begin() + (N * M), val);
+        std::fill(_data.begin(), _data.begin() + (N * M), val);
     }
 
    private:
     //vector??????, Rozmiar jest znany w czasie kompilacji
     std::array<T, N*M> _data;
 };
+
 
 template <std::size_t N, std::size_t M>
 class Matrix<N, M, bool> {
@@ -195,7 +210,7 @@ TEST(Matrix, M2M_add) {
     m2(1, 1) = 2.0;
 
     auto m3 = m1 + m2;
-
+    std::cout << m3 << std::endl;
     EXPECT_EQ(m3(1, 1), 3);
 }
 
