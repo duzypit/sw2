@@ -27,10 +27,10 @@ class Matrix {
     Matrix() : _data() {}
     // Trochę bardziej czytelne
     ~Matrix() = default;
-    typedef T value_type;
+
     // add op
     template <std::size_t N1, std::size_t M1, typename T1>
-    Matrix<N, M, T> operator+(const Matrix<N1, M1, T1>& rhs) {
+    Matrix<N, M, T> operator+(Matrix<N1, M1, T1>& rhs) {
         // To powinien być błąd na etapie kompilacji, nie runtime
         if constexpr (!std::is_convertible<T, T1>::value) {
             static_assert(std::is_convertible<T, T1>::value, "Martix add: type of second matrix is not convertible");
@@ -41,24 +41,11 @@ class Matrix {
             static_assert("Matrix add: size mismatch");
         }
 
-        //Matrix<N, M, T> tmp;
-        //std::copy(_data.begin(), _data.end(), std::back_inserter(tmp));
-
-        std::transform(_data.begin(), _data.end(), rhs.begin(), rhs.end(), std::plus<T>());
-
         // Da się zastosować jakiś algorytm STL'a?
+        Matrix<N,M,T> tmp;
+        std::transform(_data.begin(), _data.end(), rhs.begin(), tmp.begin(), [](T f, T1 s){return f+s;});
 
-        /*std::size_t row = 0;
-        std::size_t col = 0;
-        for (const auto& v : _data) {
-            tmp(row, col) = v + rhs(row, col);
-            ++col;
-            if (col >= M) {
-                col = 0;
-                ++row;
-            }
-        }*/
-        return *this;
+        return tmp;
     }
 
     // multiply op
@@ -196,6 +183,12 @@ class Matrix<0, 0, T> {
     }
 };
 
+TEST(Matrix, flood){
+    Matrix<2,2,float> m;
+    m.fill(0);
+    EXPECT_EQ(m(1,1), 0.0);
+}
+
 TEST(Matrix, M2M_add) {
     Matrix<2, 2, int> m1;
     m1(0, 0) = 1;
@@ -210,7 +203,6 @@ TEST(Matrix, M2M_add) {
     m2(1, 1) = 2.0;
 
     auto m3 = m1 + m2;
-    std::cout << m3 << std::endl;
     EXPECT_EQ(m3(1, 1), 3);
 }
 
