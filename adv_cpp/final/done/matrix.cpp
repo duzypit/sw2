@@ -43,7 +43,7 @@ class Matrix {
 
         // Da się zastosować jakiś algorytm STL'a?
         Matrix<N,M,T> tmp;
-        std::transform(_data.begin(), _data.end(), rhs.begin(), tmp.begin(), [](T f, T1 s){return f+s;});
+        std::transform(_data.begin(), _data.end(), rhs.begin(), tmp.begin(), [](T f, T1 s) -> T {return f+s;});
 
         return tmp;
     }
@@ -80,20 +80,37 @@ class Matrix {
     }
 
     // BATA: ?????? Dlaczego??
+    // rozumiem, że chodziło o sytuację A+b*I? Jeśi tak, poniżej kod
     // scalar add op
     template <typename T1>
-    Matrix<N, M, T> operator+(const T1&) {
-        throw std::runtime_error("Martix + scalar: op is forbidden ;)");
+    Matrix<N, M, T> operator+(const T1& scalar) {
+
+        Matrix<N, M, T> tmp;
+        tmp.fill(0);
+
+        std::size_t diagCounter = 0;
+        if(N > M) {
+            diagCounter = N;
+        } else {
+            diagCounter = M;
+        }
+
+        for(std::size_t x = 0; x < diagCounter; ++x){
+            tmp(x,x) = 1;
+        }
+
+        Matrix<N,M,T> scalarMultipliedByIdentity = tmp * scalar;
+
+
+        return scalarMultipliedByIdentity;
     }
 
     // scalar multiply op
     template <typename T1>
     auto operator*(const T1& rhs) {
         // To powinien być błąd na etapie kompilacji, nie runtime
-        if (!std::is_convertible<T, T1>::value) {
-            throw std::runtime_error(
-                "Martix multiply by scalar: type of scalar is not "
-                "convertiblel");
+        if constexpr (!std::is_convertible<T, T1>::value) {
+            static_assert(std::is_convertible<T, T1>::value, "Martix multiply: type of second matrix is not convertible");
         }
 
         Matrix<N, M, T> tmp;
@@ -155,10 +172,21 @@ class Matrix {
     }
 
     // Jeżeli T =float, to nie mogę zrobić T(0)
-    void fill(T val) {
-        std::fill(_data.begin(), _data.begin() + (N * M), val);
-    }
 
+//    void fill(T val) {
+//        std::fill(_data.begin(), _data.begin() + (N * M), val);
+//    }
+
+    template <typename T1>
+    void fill (T1 val){
+        if constexpr (!std::is_convertible<T, T1>::value) {
+            static_assert("Martix fill: type of second var is not convertible");
+        } else {
+            T compTypeVal = dynamic_cast<T>(val);
+        }
+
+            std::fill(_data.begin(), _data.begin() +(N*M), compTypeVal);
+    }
    private:
     //vector??????, Rozmiar jest znany w czasie kompilacji
     std::array<T, N*M> _data;
