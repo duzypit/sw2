@@ -101,6 +101,7 @@ class Matrix {
 
         Matrix<N,M,T> scalarMultipliedByIdentity = tmp * scalar;
 
+        std::cout << scalarMultipliedByIdentity << std::endl;
 
         return scalarMultipliedByIdentity;
     }
@@ -173,19 +174,19 @@ class Matrix {
 
     // Jeżeli T =float, to nie mogę zrobić T(0)
 
-//    void fill(T val) {
-//        std::fill(_data.begin(), _data.begin() + (N * M), val);
-//    }
+    void fill(T val) {
+        std::fill(_data.begin(), _data.begin() + (N * M), val);
+    }
 
     template <typename T1>
     void fill (T1 val){
         if constexpr (!std::is_convertible<T, T1>::value) {
             static_assert("Martix fill: type of second var is not convertible");
         } else {
-            T compTypeVal = dynamic_cast<T>(val);
+            T compTypeVal = reinterpret_cast<T>(val);
+            std::fill(_data.begin(), _data.begin() +(N*M), compTypeVal);
         }
 
-            std::fill(_data.begin(), _data.begin() +(N*M), compTypeVal);
     }
    private:
     //vector??????, Rozmiar jest znany w czasie kompilacji
@@ -210,11 +211,11 @@ class Matrix<0, 0, T> {
         std::cout << "Matrix for N = 0 && M =0 cannot be created!" << std::endl;
     }
 };
-
-TEST(Matrix, flood){
+TEST(Matrix, Matrix_add_scalar){
     Matrix<2,2,float> m;
     m.fill(0);
-    EXPECT_EQ(m(1,1), 0.0);
+    auto m2 = m + 2.0;
+    EXPECT_EQ(m2(1,1), 2.0);
 }
 
 TEST(Matrix, M2M_add) {
@@ -284,13 +285,13 @@ TEST(Matrix, Matrix_multiplication_by_scalar) {
     auto m2 = m1 * scalar;
     EXPECT_EQ(m2(1, 1), 5);
 }
-
+/*
 TEST(Matrix, Matrix_add_scalar) {
     Matrix<2, 2, int> m;
     int scalar = 5;
     EXPECT_ANY_THROW(m + scalar);
 }
-
+*/
 TEST(Matrix, Copy_ctor) {
     Matrix<2, 2, int> m1;
     m1(0, 0) = 1;
