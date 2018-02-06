@@ -38,7 +38,7 @@ class Matrix {
 
         // To powinien być błąd na etapie kompilacji, nie runtime
         if (N != N1 || M != M1) {
-            static_assert("Matrix add: size mismatch");
+            static_assert(!(N != N1 || M != M1),"Matrix add: size mismatch");
         }
 
         // Da się zastosować jakiś algorytm STL'a?
@@ -58,8 +58,8 @@ class Matrix {
 
 
         // To powinien być błąd na etapie kompilacji, nie runtime
-        if (N != M1) {
-            static_assert("Matrix multiply: size mismatch");
+        if constexpr (N != M1) {
+            static_assert(!(N!=M1), "Matrix multiply: size mismatch");
         }
 
         Matrix<N, M, T> tmp;
@@ -80,30 +80,11 @@ class Matrix {
     }
 
     // BATA: ?????? Dlaczego??
-    // rozumiem, że chodziło o sytuację A+b*I? Jeśi tak, poniżej kod
+    // Czy chodzi o sytuację: A+b*I? Jeśi tak, to widzę problem: jak stowrzyc macierz jednostkową dla danego typu? Czy tzeba
     // scalar add op
     template <typename T1>
-    Matrix<N, M, T> operator+(const T1& scalar) {
-
-        Matrix<N, M, T> tmp;
-        tmp.fill(0);
-
-        std::size_t diagCounter = 0;
-        if(N > M) {
-            diagCounter = N;
-        } else {
-            diagCounter = M;
-        }
-
-        for(std::size_t x = 0; x < diagCounter; ++x){
-            tmp(x,x) = 1;
-        }
-
-        Matrix<N,M,T> scalarMultipliedByIdentity = tmp * scalar;
-
-        std::cout << scalarMultipliedByIdentity << std::endl;
-
-        return scalarMultipliedByIdentity;
+    Matrix<N, M, T> operator+(const T1&) {
+        throw std::runtime_error("Martix + scalar: op is forbidden ;)");
     }
 
     // scalar multiply op
@@ -174,19 +155,16 @@ class Matrix {
 
     // Jeżeli T =float, to nie mogę zrobić T(0)
 
-    void fill(T val) {
+    void fill(const T& val) {
         std::fill(_data.begin(), _data.begin() + (N * M), val);
     }
 
     template <typename T1>
-    void fill (T1 val){
+    void fill (const T1& val){
         if constexpr (!std::is_convertible<T, T1>::value) {
-            static_assert("Martix fill: type of second var is not convertible");
-        } else {
-            T compTypeVal = reinterpret_cast<T>(val);
-            std::fill(_data.begin(), _data.begin() +(N*M), compTypeVal);
+            static_assert(std::is_convertible<T1, T>::value, "Martix fill: type of second var is not convertible");
         }
-
+        std::fill(_data.begin(), _data.begin() +(N*M), static_cast<T>(val));
     }
    private:
     //vector??????, Rozmiar jest znany w czasie kompilacji
@@ -211,11 +189,17 @@ class Matrix<0, 0, T> {
         std::cout << "Matrix for N = 0 && M =0 cannot be created!" << std::endl;
     }
 };
-TEST(Matrix, Matrix_add_scalar){
+
+TEST(Matrix, m2m_multiply_error){
+    Matrix<2,2,float> m1;
+    Matrix<2,2, int> m2;
+    auto m3 = m1 + m2;
+}
+
+TEST(Matrix, flood){
     Matrix<2,2,float> m;
     m.fill(0);
-    auto m2 = m + 2.0;
-    EXPECT_EQ(m2(1,1), 2.0);
+    EXPECT_EQ(m(1,1), 0.0);
 }
 
 TEST(Matrix, M2M_add) {
@@ -285,13 +269,13 @@ TEST(Matrix, Matrix_multiplication_by_scalar) {
     auto m2 = m1 * scalar;
     EXPECT_EQ(m2(1, 1), 5);
 }
-/*
+
 TEST(Matrix, Matrix_add_scalar) {
     Matrix<2, 2, int> m;
     int scalar = 5;
     EXPECT_ANY_THROW(m + scalar);
 }
-*/
+
 TEST(Matrix, Copy_ctor) {
     Matrix<2, 2, int> m1;
     m1(0, 0) = 1;
