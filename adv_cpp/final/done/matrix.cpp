@@ -106,11 +106,13 @@ class Matrix {
             tmp(x,x) = 1;
         }
 
-        Matrix<N,M,T> scalarMultipliedByIdentity = tmp * scalar;
+        tmp = tmp * scalar;
 
-        std::cout << scalarMultipliedByIdentity << std::endl;
+        Matrix<N,M,T> result;
 
-        return scalarMultipliedByIdentity;
+        std::transform(_data.begin(), _data.end(), tmp.begin(), result.begin(), [](T f, T1 s) -> T {return f+s;});
+
+        return result;
     }
 
     // scalar multiply op
@@ -216,11 +218,16 @@ class Matrix<0, 0, T> {
     }
 };
 
-TEST(Matrix, m2m_multiply_error){
-    Matrix<2,2,float> m1;
-    Matrix<2,2, int> m2;
-    auto m3 = m1 + m2;
+TEST(Matrix, M2S_add){
+    Matrix<2,2,float> m;
+    int x = 5;
+    m.fill(2.0);
+
+    auto m1 = m + x;
+
+    EXPECT_EQ(m1(1,1), 7);
 }
+
 
 TEST(Matrix, flood){
     Matrix<2,2,float> m;
@@ -296,11 +303,6 @@ TEST(Matrix, Matrix_multiplication_by_scalar) {
     EXPECT_EQ(m2(1, 1), 5);
 }
 
-TEST(Matrix, Matrix_add_scalar) {
-    Matrix<2, 2, int> m;
-    int scalar = 5;
-    EXPECT_ANY_THROW(m + scalar);
-}
 
 TEST(Matrix, Copy_ctor) {
     Matrix<2, 2, int> m1;
