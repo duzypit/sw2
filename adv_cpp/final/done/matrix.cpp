@@ -1,5 +1,4 @@
-/*
-Matrix<M,N,T>
+/*Matrix<M,N,T>
 Napisać implementację:
 posiada operatory:
 x dodawania macierzy (+)
@@ -83,8 +82,35 @@ class Matrix {
     // Czy chodzi o sytuację: A+b*I? Jeśi tak, to widzę problem: jak stowrzyc macierz jednostkową dla danego typu? Czy tzeba
     // scalar add op
     template <typename T1>
-    Matrix<N, M, T> operator+(const T1&) {
-        throw std::runtime_error("Martix + scalar: op is forbidden ;)");
+    Matrix<N,M,T> operator+(const T1& scalar) {
+
+        if constexpr(!std::is_convertible<T1, T>::value){
+            static_assert(std::is_convertible<T1, T>::value, "Martix multiply: type of scalar is not convertible");
+        }
+
+        if constexpr (!std::is_convertible<int, T>::value){
+            static_assert(std::is_convertible<int, T>::value, "Matrix add scalar: can't create identity matrix");
+        }
+
+        Matrix<N, M, T> tmp;
+        tmp.fill(0);
+
+        std::size_t diagCounter = 0;
+        if(N > M) {
+            diagCounter = N;
+        } else {
+            diagCounter = M;
+        }
+
+        for(std::size_t x = 0; x < diagCounter; ++x){
+            tmp(x,x) = 1;
+        }
+
+        Matrix<N,M,T> scalarMultipliedByIdentity = tmp * scalar;
+
+        std::cout << scalarMultipliedByIdentity << std::endl;
+
+        return scalarMultipliedByIdentity;
     }
 
     // scalar multiply op
